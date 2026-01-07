@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Image } from "lucide-react";
 import {
   Table,
@@ -8,12 +9,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Trade } from "@/data/trades";
+import TradeDetailModal from "./TradeDetailModal";
 
 interface TradesTableProps {
   trades: Trade[];
 }
 
 const TradesTable = ({ trades }: TradesTableProps) => {
+  const [selectedTrade, setSelectedTrade] = useState<Trade | null>(null);
   const getStatusClass = (status: Trade["status"]) => {
     switch (status) {
       case "ACTIVE":
@@ -60,7 +63,11 @@ const TradesTable = ({ trades }: TradesTableProps) => {
           </TableHeader>
           <TableBody>
             {trades.map((trade) => (
-              <TableRow key={trade.id} className="border-border">
+              <TableRow 
+                key={trade.id} 
+                className="border-border cursor-pointer hover:bg-muted/50 transition-colors"
+                onClick={() => setSelectedTrade(trade)}
+              >
                 <TableCell>
                   <div className="w-10 h-10 bg-muted rounded flex items-center justify-center">
                     <Image className="w-5 h-5 text-muted-foreground" />
@@ -89,6 +96,12 @@ const TradesTable = ({ trades }: TradesTableProps) => {
           </TableBody>
         </Table>
       </div>
+
+      <TradeDetailModal 
+        trade={selectedTrade} 
+        open={!!selectedTrade} 
+        onClose={() => setSelectedTrade(null)} 
+      />
     </div>
   );
 };
