@@ -61,13 +61,20 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
         </DialogHeader>
 
         <div className="space-y-6 mt-4">
-          {/* Screenshot placeholder */}
-          <div className="bg-muted rounded-lg aspect-video flex items-center justify-center border border-border">
-            <div className="text-center text-muted-foreground">
-              <Image className="w-12 h-12 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">Trade Screenshot</p>
-              <p className="text-xs opacity-70">{trade.pair} Chart</p>
-            </div>
+          {/* Screenshot */}
+          <div className="bg-muted rounded-lg overflow-hidden border border-border">
+            <img 
+              src={trade.screenshot} 
+              alt={`${trade.pair} Chart`}
+              className="w-full aspect-video object-cover"
+            />
+          </div>
+
+          {/* Post Text */}
+          <div className="bg-muted/50 rounded-lg p-4 border border-border">
+            <p className="text-sm text-foreground whitespace-pre-line leading-relaxed">
+              {trade.postText}
+            </p>
           </div>
 
           {/* Trade info grid */}
