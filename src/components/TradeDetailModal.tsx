@@ -139,8 +139,8 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-card border-border max-w-2xl">
-        <DialogHeader>
+      <DialogContent className="bg-card border-border max-w-2xl max-h-[90vh] flex flex-col">
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="text-foreground flex items-center gap-3">
             <span className="text-xl">Signal #{trade.id}</span>
             <span className={`px-2 py-1 rounded text-xs font-medium ${getDirectionClass(trade.direction)}`}>
@@ -150,13 +150,13 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6 mt-4">
+        <div className="space-y-6 mt-4 overflow-y-auto flex-1 pr-2">
           {/* Screenshot */}
-          <div className="bg-muted rounded-lg overflow-hidden border border-border">
+          <div className="bg-muted rounded-lg overflow-hidden border border-border flex-shrink-0">
             <img 
               src={trade.screenshot} 
               alt={`${trade.pair} Chart`}
-              className="w-full aspect-video object-cover"
+              className="w-full h-auto max-h-[200px] object-cover"
             />
           </div>
 
