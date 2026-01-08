@@ -26,26 +26,116 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
       : "bg-loss/20 text-loss";
   };
 
-  // Demo log entries based on trade
-  const logEntries = [
-    { time: trade.date, action: "Signal opened", details: `${trade.pair} ${trade.direction} ${trade.leverage}` },
-    { time: trade.date.replace(/\d{2}:\d{2}$/, (m) => {
-      const [h, min] = m.split(':').map(Number);
-      return `${String(h).padStart(2, '0')}:${String(min + 5).padStart(2, '0')}`;
-    }), action: "Entry executed", details: `Entry at market price` },
-    ...(trade.status === "Closed" ? [
-      { time: trade.date.replace(/\d{2}:\d{2}$/, (m) => {
-        const [h, min] = m.split(':').map(Number);
-        return `${String((h + 2) % 24).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
-      }), action: trade.pnl >= 0 ? "Take profit hit" : "Stop loss hit", details: `Closed with ${trade.result}` }
-    ] : []),
-    ...(trade.status === "ACTIVE" ? [
-      { time: "Now", action: "Position active", details: `Current P&L: ${trade.result}` }
-    ] : []),
-    ...(trade.status === "EXPIRED" ? [
-      { time: trade.date.replace(/\d{2}:\d{2}$/, () => "23:59"), action: "Signal expired", details: `Entry conditions not met` }
-    ] : []),
-  ];
+  // Generate realistic log entries based on trade
+  const generateLogEntries = () => {
+    const baseDate = trade.date.split(' ')[0];
+    const entries = [];
+    
+    // Signal received
+    entries.push({
+      title: "Signal received from Telegram",
+      details: [
+        `Price: ${(Math.random() * 100 + 10).toFixed(1)} USDT`
+      ],
+      time: `${baseDate.split('-').slice(1).reverse().join(' ')}, 16:00`
+    });
+
+    // Position opened
+    const entryPrice = (Math.random() * 100 + 10).toFixed(1);
+    const positionSize = (Math.random() * 2000 + 500).toFixed(0);
+    const bought = (parseFloat(positionSize) / parseFloat(entryPrice)).toFixed(2);
+    entries.push({
+      title: "Position opened",
+      details: [
+        `Entry price: ${entryPrice} USDT`,
+        `Position size: ${positionSize} USDT`,
+        `Bought: ${bought} ${trade.pair.split('/')[0]}`,
+        `Direction: ${trade.direction}`,
+        `TP: ${(parseFloat(entryPrice) * 1.05).toFixed(0)} / ${(parseFloat(entryPrice) * 1.1).toFixed(0)} / ${(parseFloat(entryPrice) * 1.15).toFixed(0)}`,
+        `SL: ${(parseFloat(entryPrice) * 0.95).toFixed(0)}`
+      ],
+      time: `${baseDate.split('-').slice(1).reverse().join(' ')}, 16:15`
+    });
+
+    if (trade.status === "Closed" && trade.pnl >= 0) {
+      // TP1 hit
+      entries.push({
+        title: "TP1 hit — partial close",
+        details: [
+          `TP1 price: ${(parseFloat(entryPrice) * 1.05).toFixed(0)} USDT`,
+          `Closed: 33%`,
+          `Closed amount: ${(parseFloat(positionSize) * 0.33).toFixed(2)} USDT`,
+          `PNL: +${(parseFloat(positionSize) * 0.05).toFixed(2)} USDT (+5.0%)`
+        ],
+        time: `${baseDate.split('-').slice(1).reverse().join(' ')}, 18:00`
+      });
+
+      // SL moved
+      entries.push({
+        title: "Stop Loss moved",
+        details: [
+          `New SL: ${entryPrice} USDT (Breakeven)`
+        ],
+        time: `${baseDate.split('-').slice(1).reverse().join(' ')}, 18:05`
+      });
+
+      // TP2 hit
+      entries.push({
+        title: "TP2 hit — full close",
+        details: [
+          `TP2 price: ${(parseFloat(entryPrice) * 1.1).toFixed(0)} USDT`,
+          `Closed: ${(parseFloat(positionSize) * 0.67).toFixed(2)} USDT`,
+          `PNL: +${(trade.pnl * 0.7).toFixed(2)} USDT`
+        ],
+        time: `${baseDate.split('-').slice(1).reverse().join(' ')}, 21:00`
+      });
+    } else if (trade.status === "Closed" && trade.pnl < 0) {
+      // SL hit
+      entries.push({
+        title: "Stop Loss hit",
+        details: [
+          `SL price: ${(parseFloat(entryPrice) * 0.95).toFixed(0)} USDT`,
+          `Closed: 100%`,
+          `PNL: ${trade.pnl.toFixed(2)} USDT (${trade.result})`
+        ],
+        time: `${baseDate.split('-').slice(1).reverse().join(' ')}, 18:30`
+      });
+    } else if (trade.status === "ACTIVE") {
+      entries.push({
+        title: "Position active",
+        details: [
+          `Current PNL: +${trade.pnl.toFixed(2)} USDT`,
+          `Unrealized: ${trade.result}`
+        ],
+        time: "Now"
+      });
+    } else if (trade.status === "EXPIRED") {
+      entries.push({
+        title: "Signal expired",
+        details: [
+          `Entry conditions not met`,
+          `Order cancelled`
+        ],
+        time: `${baseDate.split('-').slice(1).reverse().join(' ')}, 23:59`
+      });
+    }
+
+    // Final result for closed trades
+    if (trade.status === "Closed") {
+      entries.push({
+        title: "Trade closed — final result",
+        details: [
+          `Total PNL: ${trade.pnl >= 0 ? '+' : ''}${trade.pnl.toFixed(2)} USDT`,
+          `Total return: ${trade.result}`
+        ],
+        time: `${baseDate.split('-').slice(1).reverse().join(' ')}, 21:30`
+      });
+    }
+
+    return entries;
+  };
+
+  const logEntries = generateLogEntries();
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -102,19 +192,30 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
           {/* Trade log */}
           <div>
             <h3 className="text-sm font-medium text-foreground mb-3">Trade Log</h3>
-            <div className="space-y-2">
-              {logEntries.map((entry, index) => (
-                <div 
-                  key={index} 
-                  className="flex items-start gap-3 text-sm bg-muted/30 rounded-lg p-3"
-                >
-                  <span className="text-muted-foreground whitespace-nowrap font-mono text-xs">
-                    {entry.time}
-                  </span>
-                  <span className="text-foreground font-medium">{entry.action}</span>
-                  <span className="text-muted-foreground ml-auto">{entry.details}</span>
-                </div>
-              ))}
+            <div className="relative">
+              {/* Timeline line */}
+              <div className="absolute left-[7px] top-3 bottom-3 w-0.5 bg-border" />
+              
+              <div className="space-y-4">
+                {logEntries.map((entry, index) => (
+                  <div key={index} className="flex gap-4 relative">
+                    {/* Timeline dot */}
+                    <div className="w-4 h-4 rounded-full bg-muted border-2 border-primary flex-shrink-0 mt-1 z-10" />
+                    
+                    <div className="flex-1 bg-muted/30 rounded-lg p-3">
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <span className="text-foreground font-medium text-sm">{entry.title}</span>
+                        <span className="text-muted-foreground text-xs whitespace-nowrap">{entry.time}</span>
+                      </div>
+                      <div className="space-y-1">
+                        {entry.details.map((detail, i) => (
+                          <p key={i} className="text-muted-foreground text-xs">{detail}</p>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

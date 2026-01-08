@@ -2,7 +2,7 @@ import StatsCard from "./StatsCard";
 
 const StatsGrid = () => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       <StatsCard 
         title="P&L %" 
         value="+147.32%" 
@@ -22,10 +22,6 @@ const StatsGrid = () => {
         title="Win Rate" 
         value="68.5%" 
         valueColor="profit"
-      />
-      <StatsCard 
-        title="Active Trades" 
-        value="3" 
       />
     </div>
   );
