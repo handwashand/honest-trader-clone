@@ -5,12 +5,12 @@ const StatsGrid = () => {
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       <StatsCard 
         title="P&L %" 
-        value="+147.32%" 
+        value="+147%" 
         valueColor="profit"
       />
       <StatsCard 
         title="USDT Profit" 
-        value="+14,732.50" 
+        value="+14,732" 
         valueColor="profit"
         subtitle="USDT"
       />
@@ -20,7 +20,7 @@ const StatsGrid = () => {
       />
       <StatsCard 
         title="Win Rate" 
-        value="68.5%" 
+        value="68%" 
         valueColor="profit"
       />
     </div>
