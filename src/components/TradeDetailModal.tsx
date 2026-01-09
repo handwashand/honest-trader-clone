@@ -161,10 +161,21 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-card border-border max-w-2xl max-h-[90vh] flex flex-col [&>button]:w-8 [&>button]:h-8 [&>button]:bg-muted [&>button]:hover:bg-muted/80 [&>button]:rounded-full [&>button]:opacity-100 [&>button]:right-3 [&>button]:top-3 [&>button>svg]:w-5 [&>button>svg]:h-5">
+      <DialogContent className="bg-card border-border max-w-2xl max-h-[90vh] flex flex-col p-4 sm:p-6 pt-12 sm:pt-6">
+        {/* Custom close button */}
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 w-10 h-10 rounded-full bg-muted hover:bg-muted/80 flex items-center justify-center transition-colors z-50"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        
         <DialogHeader className="flex-shrink-0">
-          <DialogTitle className="text-foreground flex items-center gap-3">
-            <span className="text-xl">Signal #{trade.id}</span>
+          <DialogTitle className="text-foreground flex items-center gap-2 sm:gap-3 flex-wrap pr-8">
+            <span className="text-lg sm:text-xl">Signal #{trade.id}</span>
             <span className={`px-2 py-1 rounded text-xs font-medium ${getDirectionClass(trade.direction)}`}>
               {trade.direction}
             </span>
