@@ -60,15 +60,15 @@ const TradesTable = ({ trades }: TradesTableProps) => {
         <Table className="min-w-[400px]">
           <TableHeader>
             <TableRow className="border-border hover:bg-transparent">
-              <TableHead className="text-muted-foreground font-medium text-[10px] sm:text-xs p-1 sm:p-2">Signal</TableHead>
-              <TableHead className="text-muted-foreground font-medium text-[10px] sm:text-xs hidden md:table-cell p-1 sm:p-2">№</TableHead>
-              <TableHead className="text-muted-foreground font-medium text-[10px] sm:text-xs p-1 sm:p-2">Date</TableHead>
-              <TableHead className="text-muted-foreground font-medium text-[10px] sm:text-xs p-1 sm:p-2">Pair</TableHead>
-              <TableHead className="text-muted-foreground font-medium text-[10px] sm:text-xs hidden lg:table-cell p-1 sm:p-2">Direction</TableHead>
-              <TableHead className="text-muted-foreground font-medium text-[10px] sm:text-xs hidden lg:table-cell p-1 sm:p-2">Leverage</TableHead>
-              <TableHead className="text-muted-foreground font-medium text-[10px] sm:text-xs hidden md:table-cell p-1 sm:p-2">Result</TableHead>
-              <TableHead className="text-muted-foreground font-medium text-[10px] sm:text-xs p-1 sm:p-2">P&L</TableHead>
-              <TableHead className="text-muted-foreground font-medium text-[10px] sm:text-xs hidden lg:table-cell p-1 sm:p-2">Status</TableHead>
+              <TableHead className="text-muted-foreground font-medium text-xs px-1 py-2 sm:px-2">Signal</TableHead>
+              <TableHead className="text-muted-foreground font-medium text-xs hidden md:table-cell px-1 py-2 sm:px-2">№</TableHead>
+              <TableHead className="text-muted-foreground font-medium text-xs px-1 py-2 sm:px-2">Date</TableHead>
+              <TableHead className="text-muted-foreground font-medium text-xs px-1 py-2 sm:px-2">Pair</TableHead>
+              <TableHead className="text-muted-foreground font-medium text-xs hidden lg:table-cell px-1 py-2 sm:px-2">Direction</TableHead>
+              <TableHead className="text-muted-foreground font-medium text-xs hidden lg:table-cell px-1 py-2 sm:px-2">Leverage</TableHead>
+              <TableHead className="text-muted-foreground font-medium text-xs hidden md:table-cell px-1 py-2 sm:px-2">Result</TableHead>
+              <TableHead className="text-muted-foreground font-medium text-xs px-1 py-2 sm:px-2">P&L</TableHead>
+              <TableHead className="text-muted-foreground font-medium text-xs hidden lg:table-cell px-1 py-2 sm:px-2">Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -78,28 +78,28 @@ const TradesTable = ({ trades }: TradesTableProps) => {
                 className="border-border cursor-pointer hover:bg-muted/50 transition-colors"
                 onClick={() => setSelectedTrade(trade)}
               >
-                <TableCell className="p-1">
+                <TableCell className="px-1 py-1 sm:px-2">
                   <img 
                     src={trade.screenshot} 
                     alt={trade.pair}
                     className="w-8 h-6 sm:w-12 sm:h-9 object-cover rounded"
                   />
                 </TableCell>
-                <TableCell className="text-muted-foreground text-[10px] sm:text-xs hidden md:table-cell p-1 sm:p-2">#{trade.id}</TableCell>
-                <TableCell className="text-foreground text-[10px] sm:text-xs whitespace-nowrap p-1 sm:p-2">{trade.date.split(' ')[0]}</TableCell>
-                <TableCell className="text-foreground font-medium text-[10px] sm:text-xs p-1 sm:p-2">{trade.pair}</TableCell>
-                <TableCell className="hidden lg:table-cell p-1 sm:p-2">
-                  <span className={`px-1.5 py-0.5 rounded text-[10px] sm:text-xs font-medium ${getDirectionClass(trade.direction)}`}>
+                <TableCell className="text-muted-foreground text-xs hidden md:table-cell px-1 py-1 sm:px-2">#{trade.id}</TableCell>
+                <TableCell className="text-foreground text-xs whitespace-nowrap px-1 py-1 sm:px-2">{trade.date.split(' ')[0]}</TableCell>
+                <TableCell className="text-foreground font-medium text-xs px-1 py-1 sm:px-2">{trade.pair}</TableCell>
+                <TableCell className="hidden lg:table-cell px-1 py-1 sm:px-2">
+                  <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${getDirectionClass(trade.direction)}`}>
                     {trade.direction}
                   </span>
                 </TableCell>
-                <TableCell className="text-foreground text-[10px] sm:text-xs hidden lg:table-cell p-1 sm:p-2">{trade.leverage}</TableCell>
-                <TableCell className={`text-[10px] sm:text-xs hidden md:table-cell p-1 sm:p-2 ${getPnlClass(trade.pnl)}`}>{formatResult(trade.result)}</TableCell>
-                <TableCell className={`text-[10px] sm:text-xs p-1 sm:p-2 ${getPnlClass(trade.pnl)}`}>
+                <TableCell className="text-foreground text-xs hidden lg:table-cell px-1 py-1 sm:px-2">{trade.leverage}</TableCell>
+                <TableCell className={`text-xs hidden md:table-cell px-1 py-1 sm:px-2 ${getPnlClass(trade.pnl)}`}>{formatResult(trade.result)}</TableCell>
+                <TableCell className={`text-xs px-1 py-1 sm:px-2 ${getPnlClass(trade.pnl)}`}>
                   {formatPnl(trade.pnl)}
                 </TableCell>
-                <TableCell className="hidden lg:table-cell p-1 sm:p-2">
-                  <span className={`px-1.5 py-0.5 rounded text-[10px] sm:text-xs font-medium border ${getStatusClass(trade.status)}`}>
+                <TableCell className="hidden lg:table-cell px-1 py-1 sm:px-2">
+                  <span className={`px-1.5 py-0.5 rounded text-xs font-medium border ${getStatusClass(trade.status)}`}>
                     {trade.status}
                   </span>
                 </TableCell>
