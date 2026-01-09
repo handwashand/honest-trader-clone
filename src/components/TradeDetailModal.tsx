@@ -1,4 +1,4 @@
-import { X, Image } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -6,12 +6,34 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Trade } from "@/data/trades";
+import { Button } from "@/components/ui/button";
 
 interface TradeDetailModalProps {
   trade: Trade | null;
   open: boolean;
   onClose: () => void;
 }
+
+const TelegramDisclaimer = () => (
+  <div className="bg-muted/30 rounded-lg p-3 border border-border">
+    <Button variant="outline" size="sm" className="w-full mb-2 gap-2">
+      <ExternalLink className="w-4 h-4" />
+      View in Telegram
+    </Button>
+    <p className="text-xs text-muted-foreground text-center">
+      Signal received automatically from a Telegram channel. Text and screenshot saved without modifications.
+    </p>
+  </div>
+);
+
+const formatPnl = (pnl: number) => {
+  const rounded = Math.round(pnl);
+  return pnl >= 0 ? `+${rounded}` : `${rounded}`;
+};
+
+const formatResult = (result: string) => {
+  return result.replace(/\.\d+%/, '%');
+};
 
 const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
   if (!trade) return null;
@@ -35,15 +57,15 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
     entries.push({
       title: "Signal received from Telegram",
       details: [
-        `Price: ${(Math.random() * 100 + 10).toFixed(1)} USDT`
+        `Price: ${Math.round(Math.random() * 100 + 10)} USDT`
       ],
       time: `${baseDate.split('-').slice(1).reverse().join(' ')}, 16:00`
     });
 
     // Position opened
-    const entryPrice = (Math.random() * 100 + 10).toFixed(1);
-    const positionSize = (Math.random() * 2000 + 500).toFixed(0);
-    const bought = (parseFloat(positionSize) / parseFloat(entryPrice)).toFixed(2);
+    const entryPrice = Math.round(Math.random() * 100 + 10);
+    const positionSize = Math.round(Math.random() * 2000 + 500);
+    const bought = (positionSize / entryPrice).toFixed(2);
     entries.push({
       title: "Position opened",
       details: [
@@ -51,8 +73,8 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
         `Position size: ${positionSize} USDT`,
         `Bought: ${bought} ${trade.pair.split('/')[0]}`,
         `Direction: ${trade.direction}`,
-        `TP: ${(parseFloat(entryPrice) * 1.05).toFixed(0)} / ${(parseFloat(entryPrice) * 1.1).toFixed(0)} / ${(parseFloat(entryPrice) * 1.15).toFixed(0)}`,
-        `SL: ${(parseFloat(entryPrice) * 0.95).toFixed(0)}`
+        `TP: ${Math.round(entryPrice * 1.05)} / ${Math.round(entryPrice * 1.1)} / ${Math.round(entryPrice * 1.15)}`,
+        `SL: ${Math.round(entryPrice * 0.95)}`
       ],
       time: `${baseDate.split('-').slice(1).reverse().join(' ')}, 16:15`
     });
@@ -62,10 +84,10 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
       entries.push({
         title: "TP1 hit — partial close",
         details: [
-          `TP1 price: ${(parseFloat(entryPrice) * 1.05).toFixed(0)} USDT`,
+          `TP1 price: ${Math.round(entryPrice * 1.05)} USDT`,
           `Closed: 33%`,
-          `Closed amount: ${(parseFloat(positionSize) * 0.33).toFixed(2)} USDT`,
-          `PNL: +${(parseFloat(positionSize) * 0.05).toFixed(2)} USDT (+5.0%)`
+          `Closed amount: ${Math.round(positionSize * 0.33)} USDT`,
+          `PNL: +${Math.round(positionSize * 0.05)} USDT (+5%)`
         ],
         time: `${baseDate.split('-').slice(1).reverse().join(' ')}, 18:00`
       });
@@ -83,9 +105,9 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
       entries.push({
         title: "TP2 hit — full close",
         details: [
-          `TP2 price: ${(parseFloat(entryPrice) * 1.1).toFixed(0)} USDT`,
-          `Closed: ${(parseFloat(positionSize) * 0.67).toFixed(2)} USDT`,
-          `PNL: +${(trade.pnl * 0.7).toFixed(2)} USDT`
+          `TP2 price: ${Math.round(entryPrice * 1.1)} USDT`,
+          `Closed: ${Math.round(positionSize * 0.67)} USDT`,
+          `PNL: +${Math.round(trade.pnl * 0.7)} USDT`
         ],
         time: `${baseDate.split('-').slice(1).reverse().join(' ')}, 21:00`
       });
@@ -94,9 +116,9 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
       entries.push({
         title: "Stop Loss hit",
         details: [
-          `SL price: ${(parseFloat(entryPrice) * 0.95).toFixed(0)} USDT`,
+          `SL price: ${Math.round(entryPrice * 0.95)} USDT`,
           `Closed: 100%`,
-          `PNL: ${trade.pnl.toFixed(2)} USDT (${trade.result})`
+          `PNL: ${Math.round(trade.pnl)} USDT (${formatResult(trade.result)})`
         ],
         time: `${baseDate.split('-').slice(1).reverse().join(' ')}, 18:30`
       });
@@ -104,8 +126,8 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
       entries.push({
         title: "Position active",
         details: [
-          `Current PNL: +${trade.pnl.toFixed(2)} USDT`,
-          `Unrealized: ${trade.result}`
+          `Current PNL: ${formatPnl(trade.pnl)} USDT`,
+          `Unrealized: ${formatResult(trade.result)}`
         ],
         time: "Now"
       });
@@ -125,8 +147,8 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
       entries.push({
         title: "Trade closed — final result",
         details: [
-          `Total PNL: ${trade.pnl >= 0 ? '+' : ''}${trade.pnl.toFixed(2)} USDT`,
-          `Total return: ${trade.result}`
+          `Total PNL: ${formatPnl(trade.pnl)} USDT`,
+          `Total return: ${formatResult(trade.result)}`
         ],
         time: `${baseDate.split('-').slice(1).reverse().join(' ')}, 21:30`
       });
@@ -139,7 +161,7 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-card border-border max-w-2xl max-h-[90vh] flex flex-col">
+      <DialogContent className="bg-card border-border max-w-2xl max-h-[90vh] flex flex-col [&>button]:w-8 [&>button]:h-8 [&>button]:bg-muted [&>button]:hover:bg-muted/80 [&>button]:rounded-full [&>button]:opacity-100 [&>button]:right-3 [&>button]:top-3 [&>button>svg]:w-5 [&>button>svg]:h-5">
         <DialogHeader className="flex-shrink-0">
           <DialogTitle className="text-foreground flex items-center gap-3">
             <span className="text-xl">Signal #{trade.id}</span>
@@ -150,7 +172,7 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6 mt-4 overflow-y-auto flex-1 pr-2">
+        <div className="space-y-4 mt-4 overflow-y-auto flex-1 pr-2">
           {/* Screenshot */}
           <div className="bg-muted rounded-lg overflow-hidden border border-border flex-shrink-0">
             <img 
@@ -167,6 +189,9 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
             </p>
           </div>
 
+          {/* Telegram Disclaimer - First instance */}
+          <TelegramDisclaimer />
+
           {/* Trade info grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div className="bg-muted/50 rounded-lg p-3">
@@ -179,12 +204,12 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
             </div>
             <div className="bg-muted/50 rounded-lg p-3">
               <p className="text-xs text-muted-foreground mb-1">Result</p>
-              <p className={`font-medium ${getPnlClass(trade.pnl)}`}>{trade.result}</p>
+              <p className={`font-medium ${getPnlClass(trade.pnl)}`}>{formatResult(trade.result)}</p>
             </div>
             <div className="bg-muted/50 rounded-lg p-3">
               <p className="text-xs text-muted-foreground mb-1">P&L</p>
               <p className={`font-medium ${getPnlClass(trade.pnl)}`}>
-                {trade.pnl >= 0 ? "+" : ""}{trade.pnl.toFixed(2)} USDT
+                {formatPnl(trade.pnl)} USDT
               </p>
             </div>
           </div>
@@ -218,6 +243,9 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
               </div>
             </div>
           </div>
+
+          {/* Telegram Disclaimer - Second instance at bottom */}
+          <TelegramDisclaimer />
         </div>
       </DialogContent>
     </Dialog>

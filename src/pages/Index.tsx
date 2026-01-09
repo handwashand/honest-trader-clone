@@ -1,42 +1,80 @@
 import { useState, useMemo } from "react";
 import ProfileHeader from "@/components/ProfileHeader";
 import StatsGrid from "@/components/StatsGrid";
-import FiltersBar, { StatusFilter, DirectionFilter, PeriodFilter } from "@/components/FiltersBar";
 import TradesTable from "@/components/TradesTable";
+import OtherTraders from "@/components/OtherTraders";
 import { tradesData } from "@/data/trades";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+const ITEMS_PER_PAGE = 10;
 
 const Index = () => {
   const [language, setLanguage] = useState<"EN" | "RU">("EN");
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
-  const [directionFilter, setDirectionFilter] = useState<DirectionFilter>("All");
-  const [periodFilter, setPeriodFilter] = useState<PeriodFilter>("All time");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const filteredTrades = useMemo(() => {
-    return tradesData.filter((trade) => {
-      if (statusFilter !== "All" && trade.status.toLowerCase() !== statusFilter.toLowerCase()) {
-        return false;
-      }
-      if (directionFilter !== "All" && trade.direction !== directionFilter) {
-        return false;
-      }
-      return true;
-    });
-  }, [statusFilter, directionFilter, periodFilter]);
+  const totalPages = Math.ceil(tradesData.length / ITEMS_PER_PAGE);
+  
+  const paginatedTrades = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return tradesData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [currentPage]);
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <ProfileHeader language={language} onLanguageChange={setLanguage} />
         <StatsGrid />
-        <FiltersBar
-          status={statusFilter}
-          direction={directionFilter}
-          period={periodFilter}
-          onStatusChange={setStatusFilter}
-          onDirectionChange={setDirectionFilter}
-          onPeriodChange={setPeriodFilter}
-        />
-        <TradesTable trades={filteredTrades} />
+        <TradesTable trades={paginatedTrades} />
+        
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-6">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious 
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+                
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <PaginationItem key={page}>
+                    <PaginationLink
+                      onClick={() => handlePageChange(page)}
+                      isActive={currentPage === page}
+                      className="cursor-pointer"
+                    >
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                
+                <PaginationItem>
+                  <PaginationNext 
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
+
+        <OtherTraders />
       </div>
     </div>
   );
