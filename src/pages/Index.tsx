@@ -36,8 +36,8 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <ProfileHeader language={language} onLanguageChange={setLanguage} />
-        <StatsGrid />
-        <TradesTable trades={paginatedTrades} />
+        <StatsGrid language={language} />
+        <TradesTable trades={paginatedTrades} language={language} />
         
         {/* Pagination */}
         {totalPages > 1 && (
@@ -74,7 +74,7 @@ const Index = () => {
           </div>
         )}
 
-        <OtherTraders />
+        <OtherTraders language={language} />
       </div>
     </div>
   );
