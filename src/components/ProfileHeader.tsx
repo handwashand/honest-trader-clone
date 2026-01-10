@@ -26,12 +26,13 @@ const ProfileHeader = ({ language, onLanguageChange }: ProfileHeaderProps) => {
         </div>
         
         <p className="text-muted-foreground text-sm mb-3">
-          Professional crypto trading signals. Join our community for daily market analysis and high-probability setups. 
-          Trading since 2019 with consistent results.
+          {language === "EN" 
+            ? "Professional crypto trading signals. Join our community for daily market analysis and high-probability setups. Trading since 2019 with consistent results."
+            : "Профессиональные сигналы для криптотрейдинга. Присоединяйтесь к нашему сообществу для ежедневного анализа рынка и высоковероятных сетапов. Торгуем с 2019 года со стабильными результатами."}
         </p>
         
         <div className="flex items-center gap-4 text-xs text-muted-foreground">
-          <span>📅 Tracking since: Jan 15, 2024</span>
+          <span>📅 {language === "EN" ? "Tracking since: Jan 15, 2024" : "Отслеживаем с: 15 янв, 2024"}</span>
         </div>
       </div>
       

@@ -1,6 +1,10 @@
 import StatsCard from "./StatsCard";
 
-const StatsGrid = () => {
+interface StatsGridProps {
+  language: "EN" | "RU";
+}
+
+const StatsGrid = ({ language }: StatsGridProps) => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       <StatsCard 
@@ -9,17 +13,17 @@ const StatsGrid = () => {
         valueColor="profit"
       />
       <StatsCard 
-        title="USDT Profit" 
+        title={language === "EN" ? "USDT Profit" : "Прибыль USDT"} 
         value="+14,732" 
         valueColor="profit"
         subtitle="USDT"
       />
       <StatsCard 
-        title="Total Trades" 
+        title={language === "EN" ? "Total Trades" : "Всего сделок"} 
         value="156" 
       />
       <StatsCard 
-        title="Win Rate" 
+        title={language === "EN" ? "Win Rate" : "Винрейт"} 
         value="68%" 
         valueColor="profit"
       />

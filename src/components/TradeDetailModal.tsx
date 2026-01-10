@@ -12,16 +12,23 @@ interface TradeDetailModalProps {
   trade: Trade | null;
   open: boolean;
   onClose: () => void;
+  language: "EN" | "RU";
 }
 
-const TelegramDisclaimer = () => (
+interface TelegramDisclaimerProps {
+  language: "EN" | "RU";
+}
+
+const TelegramDisclaimer = ({ language }: TelegramDisclaimerProps) => (
   <div className="bg-muted/30 rounded-lg p-3 border border-border">
-    <Button variant="outline" size="sm" className="w-full mb-2 gap-2">
+    <Button size="sm" className="w-full mb-2 gap-2 bg-[#0088cc] hover:bg-[#0077b5] text-white border-none">
       <ExternalLink className="w-4 h-4" />
-      View in Telegram
+      {language === "EN" ? "View in Telegram" : "Открыть в Telegram"}
     </Button>
     <p className="text-xs text-muted-foreground text-center">
-      Signal received automatically from a Telegram channel. Text and screenshot saved without modifications.
+      {language === "EN" 
+        ? "Signal received automatically from a Telegram channel. Text and screenshot saved without modifications."
+        : "Сигнал получен автоматически из Telegram-канала. Текст и скриншот сохранены без изменений."}
     </p>
   </div>
 );
@@ -35,7 +42,7 @@ const formatResult = (result: string) => {
   return result.replace(/\.\d+%/, '%');
 };
 
-const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
+const TradeDetailModal = ({ trade, open, onClose, language }: TradeDetailModalProps) => {
   if (!trade) return null;
 
   const getPnlClass = (pnl: number) => {
@@ -201,7 +208,7 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
           </div>
 
           {/* Telegram Disclaimer - First instance */}
-          <TelegramDisclaimer />
+          <TelegramDisclaimer language={language} />
 
           {/* Trade info grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -256,7 +263,7 @@ const TradeDetailModal = ({ trade, open, onClose }: TradeDetailModalProps) => {
           </div>
 
           {/* Telegram Disclaimer - Second instance at bottom */}
-          <TelegramDisclaimer />
+          <TelegramDisclaimer language={language} />
         </div>
       </DialogContent>
     </Dialog>
