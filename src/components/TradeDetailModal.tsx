@@ -210,24 +210,27 @@ const TradeDetailModal = ({ trade, open, onClose, language }: TradeDetailModalPr
           {/* Telegram Disclaimer - First instance */}
           <TelegramDisclaimer language={language} />
 
-          {/* Trade info grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="bg-muted/50 rounded-lg p-3">
-              <p className="text-xs text-muted-foreground mb-1">Pair</p>
-              <p className="text-foreground font-medium">{trade.pair}</p>
+          {/* Trade info row */}
+          <div className="flex items-center justify-between gap-2 bg-muted/50 rounded-lg p-3 border border-border">
+            <div className="text-center flex-1">
+              <p className="text-[10px] text-muted-foreground mb-0.5">Pair</p>
+              <p className="text-foreground font-medium text-sm">{trade.pair}</p>
             </div>
-            <div className="bg-muted/50 rounded-lg p-3">
-              <p className="text-xs text-muted-foreground mb-1">Leverage</p>
-              <p className="text-foreground font-medium">{trade.leverage}</p>
+            <div className="w-px h-8 bg-border" />
+            <div className="text-center flex-1">
+              <p className="text-[10px] text-muted-foreground mb-0.5">Leverage</p>
+              <p className="text-foreground font-medium text-sm">{trade.leverage}</p>
             </div>
-            <div className="bg-muted/50 rounded-lg p-3">
-              <p className="text-xs text-muted-foreground mb-1">Result</p>
-              <p className={`font-medium ${getPnlClass(trade.pnl)}`}>{formatResult(trade.result)}</p>
+            <div className="w-px h-8 bg-border" />
+            <div className="text-center flex-1">
+              <p className="text-[10px] text-muted-foreground mb-0.5">Result</p>
+              <p className={`font-medium text-sm ${getPnlClass(trade.pnl)}`}>{formatResult(trade.result)}</p>
             </div>
-            <div className="bg-muted/50 rounded-lg p-3">
-              <p className="text-xs text-muted-foreground mb-1">P&L</p>
-              <p className={`font-medium ${getPnlClass(trade.pnl)}`}>
-                {formatPnl(trade.pnl)} USDT
+            <div className="w-px h-8 bg-border" />
+            <div className="text-center flex-1">
+              <p className="text-[10px] text-muted-foreground mb-0.5">P&L</p>
+              <p className={`font-medium text-sm ${getPnlClass(trade.pnl)}`}>
+                {formatPnl(trade.pnl)}
               </p>
             </div>
           </div>
