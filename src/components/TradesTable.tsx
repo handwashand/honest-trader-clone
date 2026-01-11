@@ -87,8 +87,18 @@ const TradesTable = ({ trades, language }: TradesTableProps) => {
                   />
                 </TableCell>
                 <TableCell className="text-foreground font-medium text-xs px-0.5 py-3 sm:py-2 sm:px-2">{trade.pair}</TableCell>
-                <TableCell className={`text-xs px-0.5 py-3 sm:py-2 sm:px-2 ${getPnlClass(trade.pnl)}`}>
-                  {formatPnl(trade.pnl)}
+                <TableCell className="text-xs px-0.5 py-3 sm:py-2 sm:px-2">
+                  {trade.status === "ACTIVE" ? (
+                    <span className="px-1.5 py-0.5 rounded text-xs font-medium bg-cyan-500/20 text-cyan-600 border border-cyan-500/30">
+                      Active
+                    </span>
+                  ) : trade.status === "EXPIRED" ? (
+                    <span className="px-1.5 py-0.5 rounded text-xs font-medium bg-orange-500/20 text-orange-600 border border-orange-500/30">
+                      Expired
+                    </span>
+                  ) : (
+                    <span className={getPnlClass(trade.pnl)}>{formatPnl(trade.pnl)}</span>
+                  )}
                 </TableCell>
                 <TableCell className="text-foreground text-xs whitespace-nowrap px-0.5 py-3 sm:py-2 sm:px-2">{trade.date.split(' ')[0]}</TableCell>
                 <TableCell className="text-muted-foreground text-xs hidden md:table-cell px-0.5 py-3 sm:py-2 sm:px-2">#{trade.id}</TableCell>
