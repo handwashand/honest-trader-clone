@@ -1,4 +1,16 @@
-import { ExternalLink } from "lucide-react";
+import { 
+  ExternalLink, 
+  Radio, 
+  TrendingUp, 
+  Target, 
+  ShieldCheck, 
+  Trophy, 
+  XOctagon, 
+  Activity, 
+  Clock, 
+  CheckCircle2,
+  LucideIcon
+} from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -6,6 +18,19 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Trade } from "@/data/trades";
+
+// Map log entry titles to icons
+const getLogIcon = (title: string): { icon: LucideIcon; color: string } => {
+  if (title.includes("Signal received")) return { icon: Radio, color: "text-blue-500" };
+  if (title.includes("Position opened")) return { icon: TrendingUp, color: "text-primary" };
+  if (title.includes("TP") && title.includes("hit")) return { icon: Target, color: "text-profit" };
+  if (title.includes("Stop Loss moved")) return { icon: ShieldCheck, color: "text-yellow-500" };
+  if (title.includes("Stop Loss hit")) return { icon: XOctagon, color: "text-loss" };
+  if (title.includes("Position active")) return { icon: Activity, color: "text-blue-400" };
+  if (title.includes("Signal expired")) return { icon: Clock, color: "text-muted-foreground" };
+  if (title.includes("final result")) return { icon: Trophy, color: "text-amber-500" };
+  return { icon: CheckCircle2, color: "text-muted-foreground" };
+};
 import { Button } from "@/components/ui/button";
 
 interface TradeDetailModalProps {
@@ -243,24 +268,29 @@ const TradeDetailModal = ({ trade, open, onClose, language }: TradeDetailModalPr
               <div className="absolute left-[7px] top-3 bottom-3 w-0.5 bg-border" />
               
               <div className="space-y-4">
-                {logEntries.map((entry, index) => (
-                  <div key={index} className="flex gap-4 relative">
-                    {/* Timeline dot */}
-                    <div className="w-4 h-4 rounded-full bg-muted border-2 border-primary flex-shrink-0 mt-1 z-10" />
-                    
-                    <div className="flex-1 bg-muted/30 rounded-lg p-3">
-                      <div className="flex items-start justify-between gap-2 mb-2">
-                        <span className="text-foreground font-medium text-sm">{entry.title}</span>
-                        <span className="text-muted-foreground text-xs whitespace-nowrap">{entry.time}</span>
+                {logEntries.map((entry, index) => {
+                  const { icon: Icon, color } = getLogIcon(entry.title);
+                  return (
+                    <div key={index} className="flex gap-4 relative">
+                      {/* Timeline icon */}
+                      <div className={`w-6 h-6 rounded-full bg-muted border border-border flex items-center justify-center flex-shrink-0 mt-1 z-10 ${color}`}>
+                        <Icon className="w-3.5 h-3.5" />
                       </div>
-                      <div className="space-y-1">
-                        {entry.details.map((detail, i) => (
-                          <p key={i} className="text-muted-foreground text-xs">{detail}</p>
-                        ))}
+                      
+                      <div className="flex-1 bg-muted/30 rounded-lg p-3">
+                        <div className="flex items-start justify-between gap-2 mb-2">
+                          <span className="text-foreground font-medium text-sm">{entry.title}</span>
+                          <span className="text-muted-foreground text-xs whitespace-nowrap">{entry.time}</span>
+                        </div>
+                        <div className="space-y-1">
+                          {entry.details.map((detail, i) => (
+                            <p key={i} className="text-muted-foreground text-xs">{detail}</p>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
