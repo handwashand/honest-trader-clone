@@ -216,25 +216,6 @@ const TradeDetailModal = ({ trade, open, onClose, language }: TradeDetailModalPr
         </DialogHeader>
 
         <div className="space-y-4 mt-4 overflow-y-auto flex-1 pr-2">
-          {/* Screenshot */}
-          <div className="bg-muted rounded-lg overflow-hidden border border-border flex-shrink-0">
-            <img 
-              src={trade.screenshot} 
-              alt={`${trade.pair} Chart`}
-              className="w-full h-auto max-h-[200px] object-cover"
-            />
-          </div>
-
-          {/* Post Text */}
-          <div className="bg-muted/50 rounded-lg p-4 border border-border">
-            <p className="text-sm text-foreground whitespace-pre-line leading-relaxed">
-              {trade.postText}
-            </p>
-          </div>
-
-          {/* Telegram Disclaimer - First instance */}
-          <TelegramDisclaimer language={language} />
-
           {/* Trade info row */}
           <div className="flex items-center justify-between gap-2 bg-muted/50 rounded-lg p-3 border border-border">
             <div className="text-center flex-1">
@@ -295,7 +276,23 @@ const TradeDetailModal = ({ trade, open, onClose, language }: TradeDetailModalPr
             </div>
           </div>
 
-          {/* Telegram Disclaimer - Second instance at bottom */}
+          {/* Screenshot */}
+          <div className="bg-muted rounded-lg overflow-hidden border border-border flex-shrink-0">
+            <img 
+              src={trade.screenshot} 
+              alt={`${trade.pair} Chart`}
+              className="w-full h-auto max-h-[200px] object-cover"
+            />
+          </div>
+
+          {/* Post Text */}
+          <div className="bg-muted/50 rounded-lg p-4 border border-border">
+            <p className="text-sm text-foreground whitespace-pre-line leading-relaxed">
+              {trade.postText}
+            </p>
+          </div>
+
+          {/* Telegram Disclaimer */}
           <TelegramDisclaimer language={language} />
         </div>
       </DialogContent>
