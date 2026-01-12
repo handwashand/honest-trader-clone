@@ -264,8 +264,8 @@ const TradeDetailModal = ({ trade, open, onClose, language }: TradeDetailModalPr
           <div>
             <h3 className="text-sm font-medium text-foreground mb-3">Trade Log</h3>
             <div className="relative">
-              {/* Timeline line */}
-              <div className="absolute left-[7px] top-3 bottom-3 w-0.5 bg-border" />
+              {/* Timeline line - centered under w-6 (24px) icons: 12px - 1px = 11px */}
+              <div className="absolute left-[11px] top-3 bottom-3 w-0.5 bg-border" />
               
               <div className="space-y-4">
                 {logEntries.map((entry, index) => {
