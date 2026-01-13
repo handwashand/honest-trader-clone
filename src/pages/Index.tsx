@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import ProfileHeader from "@/components/ProfileHeader";
+import HowItWorks from "@/components/HowItWorks";
 import StatsGrid from "@/components/StatsGrid";
 import TradesTable from "@/components/TradesTable";
 import OtherTraders from "@/components/OtherTraders";
@@ -36,6 +37,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <ProfileHeader language={language} onLanguageChange={setLanguage} />
+        <HowItWorks language={language} />
         <StatsGrid language={language} />
         <TradesTable trades={paginatedTrades} language={language} />
         
