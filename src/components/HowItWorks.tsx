@@ -8,47 +8,41 @@ const steps = {
   EN: [
     {
       icon: Send,
-      iconColor: "text-[#0088cc]",
-      iconBg: "bg-[#0088cc]/10",
-      title: "Collecting signals",
-      description: "Auto-collection of trades from top channels 24/7"
+      iconColor: "text-white",
+      iconBg: "bg-[#0088cc]",
+      text: "Copy signals from TG"
     },
     {
       icon: SearchCheck,
-      iconColor: "text-slate-600",
-      iconBg: "bg-slate-100",
-      title: "Exchange verification",
-      description: "Every price checked against Binance and Bybit data"
+      iconColor: "text-white",
+      iconBg: "bg-slate-600",
+      text: "Verify prices with exchange"
     },
     {
       icon: ShieldCheck,
-      iconColor: "text-emerald-500",
-      iconBg: "bg-emerald-50",
-      title: "Honest P&L",
-      description: "Only real stats without edits or deletions"
+      iconColor: "text-white",
+      iconBg: "bg-emerald-500",
+      text: "Show honest P&L"
     }
   ],
   RU: [
     {
       icon: Send,
-      iconColor: "text-[#0088cc]",
-      iconBg: "bg-[#0088cc]/10",
-      title: "Копируем сигналы",
-      description: "Авто-сбор сделок из топ-каналов 24/7"
+      iconColor: "text-white",
+      iconBg: "bg-[#0088cc]",
+      text: "Копируем сигналы из ТГ"
     },
     {
       icon: SearchCheck,
-      iconColor: "text-slate-600",
-      iconBg: "bg-slate-100",
-      title: "Сверяем с биржей",
-      description: "Проверка каждой цены по данным Binance и Bybit"
+      iconColor: "text-white",
+      iconBg: "bg-slate-600",
+      text: "Сверяем цены с биржей"
     },
     {
       icon: ShieldCheck,
-      iconColor: "text-emerald-500",
-      iconBg: "bg-emerald-50",
-      title: "Честный P&L",
-      description: "Только реальная статистика без правок и удалений"
+      iconColor: "text-white",
+      iconBg: "bg-emerald-500",
+      text: "Показываем честный P&L"
     }
   ]
 };
@@ -57,30 +51,25 @@ const HowItWorks = ({ language }: HowItWorksProps) => {
   const content = steps[language];
 
   return (
-    <section className="mb-8">
-      <h2 className="text-lg font-semibold text-foreground mb-4">
+    <section className="mb-6">
+      <h2 className="text-base font-semibold text-foreground mb-3">
         {language === "EN" ? "How it works" : "Как это работает"}
       </h2>
       
-      <div className="space-y-3">
+      <div className="flex justify-between gap-2">
         {content.map((step, index) => {
           const Icon = step.icon;
           return (
             <div 
               key={index}
-              className="flex items-center gap-4 p-4 bg-card rounded-xl border border-border"
+              className="flex-1 flex flex-col items-center text-center"
             >
-              <div className={`flex-shrink-0 w-12 h-12 rounded-xl ${step.iconBg} flex items-center justify-center`}>
-                <Icon className={`w-6 h-6 ${step.iconColor}`} strokeWidth={1.5} />
+              <div className={`w-10 h-10 rounded-full ${step.iconBg} flex items-center justify-center mb-2`}>
+                <Icon className={`w-5 h-5 ${step.iconColor}`} strokeWidth={1.5} />
               </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-medium text-foreground text-base">
-                  {step.title}
-                </h3>
-                <p className="text-sm text-muted-foreground mt-0.5 leading-snug">
-                  {step.description}
-                </p>
-              </div>
+              <p className="text-xs text-muted-foreground leading-tight">
+                {step.text}
+              </p>
             </div>
           );
         })}
